@@ -8,6 +8,8 @@ on:
         required: false
         default: ""
   push:
+    branches:
+      - main
     tags:
       - "v*"
 
@@ -22,12 +24,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # input > this repo's tag (v0.1.45-ios.2 builds Soniq v0.1.45) > newest Soniq v* tag
+      # input > this repo's tag (v0.1.45-ios.2 builds Soniq v0.1.45) > SONIQ_REF file > newest Soniq v* tag
       - name: Pick Soniq ref
         id: ref
         run: |
           REF="${{ inputs.soniq_ref }}"
           if [ -z "$REF" ] && [[ "$GITHUB_REF" == refs/tags/v* ]]; then REF="${GITHUB_REF_NAME%%-ios.*}"; fi
+          if [ -z "$REF" ] && [ -s SONIQ_REF ]; then REF="$(tr -d '[:space:]' < SONIQ_REF)"; fi
           if [ -z "$REF" ]; then
             REF=$(git ls-remote --tags --refs --sort=-v:refname https://github.com/don12335/Soniq.git 'v*' | head -1 | sed 's#.*refs/tags/##')
           fi

@@ -15,7 +15,8 @@ Requires **iOS 16.4 or later**.
 
 GitHub Actions builds the IPA on macOS (`.github/workflows/build-ipa.yml`):
 
-- **Run workflow** manually, optionally with a Soniq branch or tag (default: newest `v*` tag).
+- Every push to `main` builds the Soniq branch/tag named in `SONIQ_REF` (empty file: newest `v*` tag).
+- **Run workflow** manually, optionally with a Soniq branch or tag.
 - Push a tag `vX.Y.Z` to build Soniq `vX.Y.Z` and attach the IPA to a release. Shell-only fixes use `vX.Y.Z-ios.N`, which still builds Soniq `vX.Y.Z`.
 
 The app version is Soniq's `package.json` version; the build number is the workflow run number.
