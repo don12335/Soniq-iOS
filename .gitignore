@@ -1,0 +1,4 @@
+node_modules/
+web/
+*.ipa
+.DS_Store

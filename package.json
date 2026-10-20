@@ -1,0 +1,22 @@
+{
+  "name": "soniq-ios",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Soniq iOS shell (Capacitor). The web app is built from github.com/don12335/Soniq.",
+  "scripts": {
+    "build:web": "bash scripts/build-web.sh",
+    "sync": "cap sync ios"
+  },
+  "dependencies": {
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/keyboard": "^8.0.6",
+    "@capacitor/status-bar": "^8.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3",
+    "typescript": "^5"
+  }
+}
