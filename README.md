@@ -17,9 +17,13 @@ GitHub Actions builds the IPA on macOS (`.github/workflows/build-ipa.yml`):
 
 - Every push to `main` builds the Soniq branch/tag named in `SONIQ_REF` (empty file: newest `v*` tag).
 - **Run workflow** manually, optionally with a Soniq branch or tag.
-- Push a tag `vX.Y.Z` to build Soniq `vX.Y.Z` and attach the IPA to a release. Shell-only fixes use `vX.Y.Z-ios.N`, which still builds Soniq `vX.Y.Z`.
+- Push a tag `vX.Y.Z` to build Soniq `vX.Y.Z` and attach the IPA to a release. iOS revision tags such as `vX.Y.Z-ios.N` build the branch or tag in `SONIQ_REF`.
 
 The app version is Soniq's `package.json` version; the build number is the workflow run number.
+
+## Transfer personal data
+
+On either device, open Settings → Storage → Move data between devices. Export a JSON backup, send it through Files, AirDrop or another file transfer method, then import it on the other device. Likes, collections, playlists, listening history, recommendations and search history merge without deleting either device's existing data. Music files and temporary caches are not included.
 
 Local steps (the Xcode part needs a Mac):
 
