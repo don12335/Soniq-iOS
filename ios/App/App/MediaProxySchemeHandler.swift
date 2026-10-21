@@ -19,6 +19,15 @@ final class MediaProxySchemeHandler: NSObject, WKURLSchemeHandler, URLSessionDat
     private var dataTasks: [ObjectIdentifier: URLSessionDataTask] = [:]
 
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
+        if urlSchemeTask.request.httpMethod?.uppercased() == "OPTIONS", let url = urlSchemeTask.request.url {
+            let headers = ["Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+                           "Access-Control-Allow-Headers": "Range, Origin", "Access-Control-Max-Age": "86400"]
+            if let response = HTTPURLResponse(url: url, statusCode: 204, httpVersion: "HTTP/1.1", headerFields: headers) {
+                urlSchemeTask.didReceive(response)
+                urlSchemeTask.didFinish()
+            }
+            return
+        }
         guard let request = upstreamRequest(for: urlSchemeTask.request) else {
             urlSchemeTask.didFailWithError(URLError(.badURL))
             return
@@ -72,6 +81,11 @@ final class MediaProxySchemeHandler: NSObject, WKURLSchemeHandler, URLSessionDat
                 if name.caseInsensitiveCompare("Content-Encoding") == .orderedSame { continue }
                 headers[name] = text
             }
+            // Crossfade routes this media through Web Audio; allow the app origin to use its samples.
+            headers["Access-Control-Allow-Origin"] = "*"
+            headers["Access-Control-Allow-Methods"] = "GET, HEAD, OPTIONS"
+            headers["Access-Control-Allow-Headers"] = "Range, Origin"
+            headers["Access-Control-Expose-Headers"] = "Content-Range, Content-Length, Accept-Ranges"
             let proxied = HTTPURLResponse(url: url, statusCode: http.statusCode, httpVersion: "HTTP/1.1", headerFields: headers)
             schemeTask.didReceive(proxied ?? response)
         } else {
